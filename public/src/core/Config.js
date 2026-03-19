@@ -36,13 +36,13 @@ const Config = {
   BOT_NAMES: ['Rexar','Zyla','Nova','Dusk','Viper','Orion','Kira','Blaze'],
 
   // Camera
-  CAM_HEIGHT: 22,
-  CAM_DISTANCE: 6,
+  CAM_HEIGHT: 16,
+  CAM_DISTANCE: 4,
   CAM_LERP: 0.10,
   CAM_FOV: 62,
 
   // Collision
-  PICKUP_RADIUS: 1.6,
+  PICKUP_RADIUS: 2.4,
   BODY_HIT_RADIUS: 0.9,
   HEAD_HIT_RADIUS: 0.7,
 

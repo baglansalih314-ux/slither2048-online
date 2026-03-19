@@ -18,13 +18,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 // GAME CONFIG (must mirror client Config.js values)
 // ================================================================
 const ARENA_HALF      = 80;
-const TICK_RATE       = 20;          // server ticks per second
+const TICK_RATE       = 30;          // server ticks per second
 const TICK_MS         = 1000 / TICK_RATE;
 const SNAKE_SPEED     = 14;
 const SNAKE_SPEED_BST = 26;
 const TURN_SPEED      = 4.5;
 const SEGMENT_SPACING = 1.5;
-const PICKUP_RADIUS   = 1.6;
+const PICKUP_RADIUS   = 2.4;
 const HEAD_HIT_RADIUS = 0.7;
 const BODY_HIT_RADIUS = 0.9;
 const MAX_COLLECTIBLES = 60;
