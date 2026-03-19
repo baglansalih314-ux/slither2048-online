@@ -9,6 +9,7 @@ const Game = (() => {
   let remotes  = {};
   let collectibles = {};
   let lastTime = 0;
+  let lastInputTime = 0; // Ağ trafiğini sınırlandırmak için eklendi
   let myName   = '';
   let alive    = false;
   let localScore  = 0;
@@ -241,11 +242,18 @@ const Game = (() => {
       // This automatically moves the head, writes the trail, and spaces ALL tail segments flawlessly.
       player.update(dt, time);
       
-      NetworkManager.sendInput(input.x, input.y, player.isBoosting);
+      // Saniyede 144 mesaj gönderip sunucuyu ve ağı kilitlememesi için 30Hz Rate Limiting
+      if (time - lastInputTime > 0.033) {
+         NetworkManager.sendInput(input.x, input.y, player.isBoosting);
+         lastInputTime = time;
+      }
 
       CameraController.update(dt, player.headPosition, player.isBoosting);
     } else {
-      NetworkManager.sendInput(input.x, input.y, false);
+      if (time - lastInputTime > 0.033) {
+         NetworkManager.sendInput(input.x, input.y, false);
+         lastInputTime = time;
+      }
     }
 
     Object.values(remotes).forEach(r => r.update(dt, camera));
