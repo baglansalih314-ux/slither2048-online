@@ -1,6 +1,9 @@
 'use strict';
 const UIController = (() => {
-  function init() {
+  let _offlineMode = false;
+
+  function init(offlineMode) {
+    _offlineMode = !!offlineMode;
     _bindNameScreen();
     _bindHudButtons();
     _bindGameOverButtons();
@@ -11,15 +14,23 @@ const UIController = (() => {
   function _bindNameScreen() {
     const input = document.getElementById('name-input');
     const btn   = document.getElementById('btn-play');
-    input.addEventListener('keydown', e => { if (e.key === 'Enter') _doPlay(); });
-    btn.addEventListener('click', () => { AudioManager.init(); AudioManager.resume(); _doPlay(); });
+    const btnOff = document.getElementById('btn-play-offline');
+    input.addEventListener('keydown', e => { if (e.key === 'Enter') _doPlay(false); });
+    btn.addEventListener('click', () => { AudioManager.init(); AudioManager.resume(); _doPlay(false); });
+    if (btnOff) btnOff.addEventListener('click', () => { AudioManager.init(); AudioManager.resume(); _doPlay(true); });
   }
 
-  function _doPlay() {
+  function _doPlay(offline) {
     const raw  = document.getElementById('name-input').value.trim();
     const name = raw.length > 0 ? raw.slice(0, 16) : 'Anonymous';
     SaveManager.set('playerName', name);
-    Game.start(name);
+    if (offline) {
+      _offlineMode = true;
+      OfflineGame.start(name);
+    } else {
+      _offlineMode = false;
+      Game.start(name);
+    }
   }
 
   function _bindHudButtons() {
@@ -37,10 +48,13 @@ const UIController = (() => {
 
   function _bindGameOverButtons() {
     document.getElementById('btn-restart').addEventListener('click', () => {
-      AudioManager.sfx.click(); Game.respawn();
+      AudioManager.sfx.click();
+      if (_offlineMode) OfflineGame.respawn(); else Game.respawn();
     });
     document.getElementById('btn-menu-go').addEventListener('click', () => {
-      AudioManager.sfx.click(); Game.stop(); StateMachine.show('name');
+      AudioManager.sfx.click();
+      if (_offlineMode) OfflineGame.stop(); else Game.stop();
+      StateMachine.show('name');
     });
   }
 

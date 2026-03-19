@@ -41,6 +41,30 @@
   min-width: 160px;
 }
 
+.btn-offline {
+  background: linear-gradient(135deg, #2d1b69, #9b59b6);
+  color: #fff;
+  font-size: clamp(0.85rem, 3.2vw, 1.1rem);
+  padding: clamp(12px,2.5vw,16px) clamp(32px,8vw,56px);
+  border-radius: 50px;
+  box-shadow: 0 0 22px rgba(155,89,182,0.45), 0 4px 16px rgba(0,0,0,0.4);
+  margin-bottom: 16px;
+  min-width: 200px;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-main);
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: all 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+.btn-offline:active {
+  transform: scale(0.94);
+  box-shadow: 0 0 10px rgba(155,89,182,0.3);
+}
+
 /* ── Toggle switch ── */
 .toggle {
   width: 44px; height: 24px;
