@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0a0a1a">
+<title>SLITHER 2048</title>
+<link rel="stylesheet" href="styles/base.css">
+<link rel="stylesheet" href="styles/screens.css">
+<link rel="stylesheet" href="styles/hud.css">
+<link rel="stylesheet" href="styles/components.css">
+<link rel="stylesheet" href="styles/multiplayer.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+
+<canvas id="game-canvas"></canvas>
+
+<!-- İsim Giriş Ekranı -->
+<div id="screen-name" class="screen active">
+  <div class="menu-logo">SLITHER<br>2048</div>
+  <div class="menu-tagline">Merge · Grow · Dominate</div>
+  <div class="name-box">
+    <input class="name-input" id="name-input" maxlength="16" placeholder="İsmin nedir?" autocomplete="off" spellcheck="false">
+    <button class="btn btn-primary" id="btn-play">▶ OYNA</button>
+    <button class="btn btn-secondary" id="btn-settings-menu">⚙ Ayarlar</button>
+    <div class="online-count" id="online-count"><span class="online-dot"></span>Bağlanıyor…</div>
+  </div>
+  <div class="menu-tip">Küpleri topla · Aynı sayıları birleştir · Güçlen</div>
+</div>
+
+<!-- HUD -->
+<div id="screen-hud" class="screen">
+  <div class="hud-tl">
+    <div class="hud-score-block">
+      <div class="hud-label">Score</div>
+      <div class="hud-value" id="hud-score">0</div>
+    </div>
+    <div class="hud-score-block">
+      <div class="hud-label">Max Tile</div>
+      <div class="hud-value gold" id="hud-tile">2</div>
+    </div>
+  </div>
+  <div class="hud-tc"><div id="combo-display">🔥 COMBO</div></div>
+  <div class="hud-tr">
+    <div class="hud-icon-btn" id="btn-lb-toggle">🏆</div>
+    <div class="hud-icon-btn" id="btn-sound">🔊</div>
+  </div>
+  <div id="boost-bar-container">
+    <div class="boost-bar-bg"><div id="boost-fill"></div></div>
+    <div class="boost-bar-label">BOOST</div>
+  </div>
+  <div id="joystick-zone">
+    <div id="joystick-base"><div id="joystick-knob"></div></div>
+  </div>
+  <div id="boost-btn">⚡</div>
+  <div id="online-hud"></div>
+</div>
+
+<!-- Leaderboard Panel -->
+<div id="lb-panel">
+  <h3>🏆 Liderler</h3>
+  <div id="lb-list"></div>
+</div>
+
+<!-- Player Name Labels Container -->
+<div id="labels-container"></div>
+
+<!-- Game Over -->
+<div id="screen-gameover" class="screen">
+  <div class="go-title">GAME OVER</div>
+  <div class="go-newbest" id="go-newbest" style="display:none">✨ YENİ REKOR! ✨</div>
+  <div class="go-killer" id="go-killer"></div>
+  <div class="go-panel">
+    <div class="go-stat"><div class="go-stat-label">Score</div><div class="go-stat-value highlight" id="go-score">0</div></div>
+    <div class="go-stat"><div class="go-stat-label">Max Tile</div><div class="go-stat-value" id="go-maxtile">2</div></div>
+  </div>
+  <button class="btn btn-primary" id="btn-restart">▶ TEKRAR OYNA</button>
+  <button class="btn btn-secondary" id="btn-menu-go">🏠 Ana Menü</button>
+</div>
+
+<!-- Settings -->
+<div id="screen-settings" class="screen">
+  <div class="settings-panel">
+    <div class="settings-title">⚙ Ayarlar</div>
+    <div class="settings-row"><span class="settings-row-label">Master Ses</span><input type="range" class="settings-slider" id="vol-master" min="0" max="100" value="80"></div>
+    <div class="settings-row"><span class="settings-row-label">Müzik</span><input type="range" class="settings-slider" id="vol-music" min="0" max="100" value="50"></div>
+    <div class="settings-row"><span class="settings-row-label">SFX</span><input type="range" class="settings-slider" id="vol-sfx" min="0" max="100" value="80"></div>
+    <div class="settings-row"><span class="settings-row-label">Titreşim</span><div class="toggle on" id="toggle-vibration"></div></div>
+    <div class="settings-row"><span class="settings-row-label">Partiküller</span><div class="toggle on" id="toggle-particles"></div></div>
+    <div class="settings-row"><span class="settings-row-label">Kalite</span>
+      <div class="quality-btns"><div class="q-btn" id="q-low">Düşük</div><div class="q-btn active" id="q-med">Orta</div><div class="q-btn" id="q-high">Yüksek</div></div>
+    </div>
+    <div class="settings-row"><span class="settings-row-label">Tutorial</span><button class="btn btn-secondary" id="btn-show-tutorial" style="font-size:.75rem;padding:6px 14px;min-width:0">Göster</button></div>
+    <div class="settings-row"><span class="settings-row-label">Sıfırla</span><button class="btn btn-secondary" id="btn-reset" style="font-size:.75rem;padding:6px 14px;min-width:0;color:#ff6b6b">Sıfırla</button></div>
+    <br>
+    <button class="btn btn-primary" id="btn-settings-back" style="width:100%">✓ Tamam</button>
+  </div>
+</div>
+
+<!-- Tutorial -->
+<div id="tutorial-overlay">
+  <div class="tutorial-card">
+    <div class="tut-icon" id="tut-icon">🕹️</div>
+    <div class="tut-title" id="tut-title">Yılanını Hareket Ettir</div>
+    <div class="tut-desc" id="tut-desc">Soldaki joystick ile yılanını yönlendir.</div>
+    <div class="tut-dots" id="tut-dots"></div>
+    <button class="btn btn-primary" id="btn-tut-next" style="width:100%">İleri →</button>
+    <button class="btn btn-secondary" id="btn-tut-skip" style="width:100%;margin-top:8px">Atla</button>
+  </div>
+</div>
+
+<div id="hit-flash"></div>
+<div id="merge-flash"></div>
+<div id="ping-display">-- ms</div>
+
+<div id="orientation-warning" style="display:none;position:fixed;inset:0;background:#070712;z-index:9999;align-items:center;justify-content:center;flex-direction:column;gap:16px;font-size:1.1rem;text-align:center;padding:20px;">
+  <div style="font-size:3rem;animation:r90 2s ease-in-out infinite">📱</div>
+  <div>Lütfen cihazı yatay çevir</div>
+</div>
+
+<!-- Core -->
+<script src="src/core/Config.js"></script>
+<script src="src/core/EventBus.js"></script>
+<script src="src/core/SaveManager.js"></script>
+<script src="src/core/StateMachine.js"></script>
+
+<!-- Utils -->
+<script src="src/utils/ObjectPool.js"></script>
+<script src="src/utils/SpatialHash.js"></script>
+
+<!-- Systems -->
+<script src="src/systems/AudioManager.js"></script>
+<script src="src/systems/InputManager.js"></script>
+<script src="src/systems/BoostSystem.js"></script>
+<script src="src/systems/ScoreSystem.js"></script>
+<script src="src/systems/MergeSystem.js"></script>
+<script src="src/systems/CollisionSystem.js"></script>
+<script src="src/systems/SpawnManager.js"></script>
+<script src="src/systems/DifficultyDirector.js"></script>
+<script src="src/systems/VFX.js"></script>
+<script src="src/systems/Renderer.js"></script>
+<script src="src/systems/Arena.js"></script>
+<script src="src/systems/CameraController.js"></script>
+
+<!-- Entities -->
+<script src="src/entities/TileColors.js"></script>
+<script src="src/entities/NumberTextureCache.js"></script>
+<script src="src/entities/CubeMaterialFactory.js"></script>
+<script src="src/entities/SnakeSegment.js"></script>
+<script src="src/entities/CollectibleCube.js"></script>
+<script src="src/entities/Snake.js"></script>
+<script src="src/entities/PlayerSnake.js"></script>
+<script src="src/entities/BotBrain.js"></script>
+<script src="src/entities/AISnake.js"></script>
+<script src="src/entities/RemoteSnake.js"></script>
+
+<!-- Network -->
+<script src="src/network/NetworkManager.js"></script>
+
+<!-- UI -->
+<script src="src/ui/TutorialSystem.js"></script>
+<script src="src/ui/Leaderboard.js"></script>
+<script src="src/ui/UIController.js"></script>
+
+<!-- Core Game + Bootstrap -->
+<script src="src/core/Game.js"></script>
+<script src="src/core/Bootstrap.js"></script>
+</body>
+</html>

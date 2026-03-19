@@ -1,0 +1,168 @@
+/* ============================================================
+   MULTIPLAYER — İsim ekranı, leaderboard, remote player etiketleri
+   ============================================================ */
+
+/* ── İsim giriş ekranı ──────────────────────────────────────── */
+#screen-name {
+  background: radial-gradient(ellipse at 50% 30%, rgba(108,99,255,0.15) 0%, transparent 70%),
+              linear-gradient(180deg, #070712 0%, #0d0d2a 100%);
+}
+
+.name-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: min(320px, 88vw);
+}
+
+.name-input {
+  width: 100%;
+  padding: 14px 20px;
+  border-radius: 50px;
+  border: 2px solid var(--c-border);
+  background: var(--c-panel);
+  color: var(--c-text);
+  font-size: 1.1rem;
+  font-family: var(--font-main);
+  text-align: center;
+  outline: none;
+  transition: border .2s;
+  -webkit-user-select: text;
+  user-select: text;
+  touch-action: auto;
+}
+.name-input:focus  { border-color: var(--c-accent); }
+.name-input::placeholder { color: var(--c-text-dim); }
+
+.online-count {
+  font-size: .78rem;
+  color: var(--c-text-dim);
+  letter-spacing: 1px;
+  margin-top: 4px;
+}
+.online-dot {
+  display: inline-block;
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: #00f5a0;
+  margin-right: 5px;
+  animation: dotPulse 1.5s infinite;
+}
+@keyframes dotPulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+/* ── Leaderboard panel ──────────────────────────────────────── */
+#lb-panel {
+  position: fixed;
+  top: 70px;
+  right: 12px;
+  width: 190px;
+  background: var(--c-panel);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius);
+  padding: 10px 12px;
+  backdrop-filter: blur(10px);
+  pointer-events: none;
+  z-index: 100;
+  transition: opacity .3s, transform .3s;
+}
+#lb-panel.hidden {
+  opacity: 0;
+  transform: translateX(20px);
+  pointer-events: none;
+}
+#lb-panel h3 {
+  font-size: .6rem;
+  color: var(--c-text-dim);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.lb-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 0;
+  font-size: .78rem;
+  border-bottom: 1px solid rgba(255,255,255,.04);
+}
+.lb-row:last-child { border-bottom: none; }
+.lb-row.lb-me      { color: var(--c-accent); }
+.lb-rank  { width: 20px; font-size: .72rem; }
+.lb-name  { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lb-score { color: var(--c-gold); font-weight: 700; font-size: .72rem; }
+
+/* ── Online sayacı (HUD) ────────────────────────────────────── */
+#online-hud {
+  position: fixed;
+  bottom: calc(86px + var(--safe-bottom));
+  right: 24px;
+  font-size: .62rem;
+  color: var(--c-text-dim);
+  letter-spacing: 1px;
+  pointer-events: none;
+}
+
+/* ── Ping göstergesi ────────────────────────────────────────── */
+#ping-display {
+  position: fixed;
+  bottom: 6px;
+  left: 8px;
+  font-size: .58rem;
+  color: rgba(255,255,255,.2);
+  pointer-events: none;
+  letter-spacing: 1px;
+}
+
+/* ── Remote player isim etiketleri ──────────────────────────── */
+#labels-container {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 50;
+}
+.remote-label {
+  position: absolute;
+  transform: translateX(-50%);
+  background: rgba(0,0,0,.55);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 20px;
+  padding: 2px 9px;
+  font-size: .65rem;
+  font-weight: 700;
+  color: #fff;
+  white-space: nowrap;
+  pointer-events: none;
+  letter-spacing: .5px;
+}
+
+/* ── Game Over killer metni ─────────────────────────────────── */
+.go-killer {
+  font-size: .85rem;
+  color: var(--c-accent2);
+  margin-bottom: 14px;
+  letter-spacing: .5px;
+  min-height: 1.2em;
+}
+.go-newbest {
+  font-size: .75rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--c-gold);
+  margin-bottom: 10px;
+  animation: pulse 1s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.5} }
+
+/* ── Boost fill id mapping ──────────────────────────────────── */
+#boost-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #6c63ff, #ff6b9d);
+  border-radius: 50px;
+  width: 100%;
+  transition: width .1s linear;
+}
+#boost-btn.off { opacity: .4; }
+
+/* ── Orientation ────────────────────────────────────────────── */
+@keyframes r90 { 0%,100%{transform:rotate(0)} 50%{transform:rotate(90deg)} }

@@ -1,0 +1,143 @@
+/* ============================================================
+   HUD — In-game heads-up display
+   ============================================================ */
+#screen-hud {
+  pointer-events: none;
+  opacity: 1;
+  display: none;
+}
+#screen-hud.active { display: block; opacity: 1; pointer-events: none; }
+
+.hud-tl {
+  position: fixed; top: 12px; left: 12px;
+  display: flex; flex-direction: column; gap: 4px;
+}
+.hud-score-block {
+  background: var(--c-panel);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius);
+  padding: 8px 14px;
+  min-width: 90px;
+  backdrop-filter: blur(8px);
+}
+.hud-label { font-size: 0.6rem; color: var(--c-text-dim); letter-spacing: 2px; text-transform: uppercase; }
+.hud-value { font-size: clamp(1.1rem, 4vw, 1.5rem); font-weight: 800; color: var(--c-text); line-height: 1; }
+.hud-value.gold { color: var(--c-gold); }
+
+.hud-tr {
+  position: fixed; top: 12px; right: 12px;
+  display: flex; gap: 8px;
+}
+.hud-icon-btn {
+  width: 42px; height: 42px;
+  background: var(--c-panel);
+  border: 1px solid var(--c-border);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; pointer-events: all;
+  font-size: 1.1rem;
+  backdrop-filter: blur(8px);
+  transition: all 0.15s;
+  touch-action: manipulation;
+}
+.hud-icon-btn:active { transform: scale(0.88); background: rgba(108,99,255,0.3); }
+
+.hud-tc {
+  position: fixed; top: 12px; left: 50%; transform: translateX(-50%);
+}
+#combo-display {
+  background: linear-gradient(135deg, rgba(255,107,157,0.2), rgba(108,99,255,0.2));
+  border: 1px solid rgba(255,107,157,0.3);
+  border-radius: 50px;
+  padding: 6px 16px;
+  font-size: 0.8rem; font-weight: 700;
+  color: var(--c-accent2);
+  backdrop-filter: blur(8px);
+  opacity: 0;
+  transform: scale(0.8);
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+#combo-display.show { opacity: 1; transform: scale(1); }
+
+/* ── Boost bar ── */
+#boost-bar-container {
+  position: fixed;
+  bottom: calc(80px + var(--safe-bottom));
+  left: 50%; transform: translateX(-50%);
+  width: 140px;
+  pointer-events: none;
+}
+.boost-bar-bg {
+  background: rgba(255,255,255,0.1);
+  border-radius: 50px;
+  height: 6px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.15);
+}
+#boost-bar-fill-OLD {
+  height: 100%;
+  background: linear-gradient(90deg, #6c63ff, #ff6b9d);
+  border-radius: 50px;
+  width: 100%;
+  transition: width 0.1s linear;
+}
+.boost-bar-label {
+  text-align: center;
+  font-size: 0.6rem;
+  color: var(--c-text-dim);
+  letter-spacing: 2px;
+  margin-top: 3px;
+  text-transform: uppercase;
+}
+
+/* ── Virtual joystick ── */
+#joystick-zone {
+  position: fixed;
+  bottom: calc(20px + var(--safe-bottom));
+  left: 20px;
+  width: 120px; height: 120px;
+  pointer-events: all;
+  touch-action: none;
+}
+#joystick-base {
+  width: 100%; height: 100%;
+  border-radius: 50%;
+  background: rgba(108,99,255,0.12);
+  border: 2px solid rgba(108,99,255,0.3);
+  position: relative;
+}
+#joystick-knob {
+  position: absolute;
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, rgba(140,130,255,0.9), rgba(108,99,255,0.7));
+  border: 2px solid rgba(150,140,255,0.5);
+  box-shadow: 0 0 16px rgba(108,99,255,0.5);
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  transition: transform 0.05s;
+}
+
+/* ── Boost button ── */
+#boost-btn {
+  position: fixed;
+  bottom: calc(30px + var(--safe-bottom));
+  right: 24px;
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, rgba(255,150,80,0.9), rgba(255,80,80,0.7));
+  border: 2px solid rgba(255,120,80,0.5);
+  box-shadow: 0 0 24px rgba(255,100,50,0.4);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; pointer-events: all;
+  touch-action: none;
+  font-size: 1.6rem;
+  transition: all 0.1s;
+  user-select: none;
+}
+#boost-btn.active {
+  box-shadow: 0 0 40px rgba(255,100,50,0.8);
+  transform: scale(0.95);
+}
+#boost-btn.disabled { opacity: 0.4; }

@@ -1,0 +1,187 @@
+/* ============================================================
+   SCREEN LAYERS — base screen behaviour
+   ============================================================ */
+.screen {
+  position: fixed; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.screen.active { pointer-events: all; opacity: 1; }
+
+/* ============================================================
+   MAIN MENU
+   ============================================================ */
+#screen-menu {
+  background: radial-gradient(ellipse at 50% 30%, rgba(108,99,255,0.15) 0%, transparent 70%),
+              linear-gradient(180deg, #070712 0%, #0d0d2a 100%);
+}
+
+.menu-logo {
+  font-size: clamp(2.5rem, 10vw, 5rem);
+  font-weight: 900;
+  letter-spacing: -2px;
+  background: linear-gradient(135deg, #6c63ff, #ff6b9d, #ffd700);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: none;
+  margin-bottom: 4px;
+  animation: logoFloat 3s ease-in-out infinite;
+}
+@keyframes logoFloat {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.menu-tagline {
+  font-size: clamp(0.75rem, 3vw, 1rem);
+  color: var(--c-text-dim);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 40px;
+}
+
+.menu-best {
+  font-size: clamp(0.8rem, 2.5vw, 0.95rem);
+  color: var(--c-gold);
+  margin-bottom: 32px;
+  letter-spacing: 1px;
+}
+
+.menu-buttons { display: flex; flex-direction: column; align-items: center; }
+
+.menu-tip {
+  position: absolute; bottom: 30px;
+  font-size: 0.75rem;
+  color: var(--c-text-dim);
+  letter-spacing: 1px;
+  text-align: center;
+  padding: 0 20px;
+}
+
+/* ============================================================
+   GAME OVER
+   ============================================================ */
+#screen-gameover {
+  background: rgba(5,5,15,0.92);
+  backdrop-filter: blur(12px);
+}
+.go-title {
+  font-size: clamp(2rem, 8vw, 3.5rem);
+  font-weight: 900;
+  color: var(--c-accent2);
+  letter-spacing: -1px;
+  margin-bottom: 8px;
+}
+.go-panel {
+  background: var(--c-panel);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius);
+  padding: 24px 32px;
+  margin-bottom: 28px;
+  min-width: 260px;
+  text-align: center;
+}
+.go-stat { margin-bottom: 12px; }
+.go-stat-label { font-size: 0.65rem; color: var(--c-text-dim); letter-spacing: 2px; text-transform: uppercase; }
+.go-stat-value { font-size: clamp(1.4rem, 5vw, 2rem); font-weight: 800; color: var(--c-text); }
+.go-stat-value.highlight { color: var(--c-gold); }
+.go-new-best {
+  font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--c-gold); margin-bottom: 16px;
+  animation: pulse 1s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.5; } }
+
+/* ============================================================
+   PAUSE
+   ============================================================ */
+#screen-pause {
+  background: rgba(5,5,15,0.88);
+  backdrop-filter: blur(16px);
+}
+.pause-title {
+  font-size: clamp(2rem, 7vw, 3rem);
+  font-weight: 900;
+  margin-bottom: 32px;
+  color: var(--c-accent);
+}
+
+/* ============================================================
+   SETTINGS
+   ============================================================ */
+#screen-settings {
+  background: rgba(5,5,15,0.95);
+  backdrop-filter: blur(16px);
+  overflow-y: auto;
+}
+.settings-panel {
+  background: var(--c-panel);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius);
+  padding: 24px;
+  width: min(340px, 90vw);
+  max-height: 80vh;
+  overflow-y: auto;
+}
+.settings-title {
+  font-size: 1.3rem; font-weight: 800;
+  margin-bottom: 20px;
+  color: var(--c-accent);
+}
+.settings-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.settings-row:last-child { border-bottom: none; }
+.settings-row-label { font-size: 0.9rem; color: var(--c-text); }
+
+/* ============================================================
+   TUTORIAL OVERLAY
+   ============================================================ */
+#tutorial-overlay {
+  position: fixed; inset: 0;
+  background: rgba(5,5,20,0.8);
+  backdrop-filter: blur(4px);
+  display: none;
+  z-index: 900;
+  align-items: center; justify-content: center;
+}
+#tutorial-overlay.show { display: flex; }
+.tutorial-card {
+  background: var(--c-panel);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius);
+  padding: 28px 24px;
+  width: min(320px, 88vw);
+  text-align: center;
+}
+.tut-icon { font-size: 2.5rem; margin-bottom: 12px; }
+.tut-title { font-size: 1.1rem; font-weight: 800; color: var(--c-accent); margin-bottom: 8px; }
+.tut-desc { font-size: 0.85rem; color: var(--c-text-dim); line-height: 1.6; margin-bottom: 20px; }
+.tut-dots { display: flex; gap: 6px; justify-content: center; margin-bottom: 16px; }
+.tut-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.2); transition: background 0.2s; }
+.tut-dot.active { background: var(--c-accent); }
+
+/* ============================================================
+   DAMAGE / MERGE FLASH FX
+   ============================================================ */
+#hit-flash {
+  position: fixed; inset: 0;
+  pointer-events: none;
+  z-index: 800;
+  background: radial-gradient(ellipse at 50% 50%, transparent 40%, rgba(255,50,50,0.25) 100%);
+  opacity: 0;
+  transition: opacity 0.1s;
+}
+#merge-flash {
+  position: fixed; inset: 0;
+  pointer-events: none;
+  z-index: 800;
+  background: radial-gradient(ellipse at 50% 50%, rgba(255,220,50,0.2) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.15s;
+}

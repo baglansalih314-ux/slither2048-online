@@ -1,0 +1,96 @@
+/* ============================================================
+   COMPONENTS — Reusable UI components
+   ============================================================ */
+
+/* ── Buttons ── */
+.btn {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  border: none; cursor: pointer;
+  font-family: var(--font-main);
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: all 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+.btn:active { transform: scale(0.94); }
+
+.btn-primary {
+  background: linear-gradient(135deg, #6c63ff, #9d58ff);
+  color: #fff;
+  font-size: clamp(1rem, 4vw, 1.25rem);
+  padding: clamp(14px,3vw,18px) clamp(40px,10vw,70px);
+  border-radius: 50px;
+  box-shadow: 0 0 30px rgba(108,99,255,0.5), 0 4px 20px rgba(0,0,0,0.4);
+  margin-bottom: 16px;
+  min-width: 200px;
+}
+.btn-primary:active {
+  box-shadow: 0 0 15px rgba(108,99,255,0.3);
+}
+
+.btn-secondary {
+  background: var(--c-panel);
+  color: var(--c-text);
+  font-size: clamp(0.8rem, 3vw, 1rem);
+  padding: 12px 32px;
+  border-radius: 50px;
+  border: 1px solid var(--c-border);
+  margin-bottom: 10px;
+  min-width: 160px;
+}
+
+/* ── Toggle switch ── */
+.toggle {
+  width: 44px; height: 24px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 50px;
+  position: relative;
+  cursor: pointer;
+  transition: background 0.2s;
+  touch-action: manipulation;
+}
+.toggle.on { background: var(--c-accent); }
+.toggle::after {
+  content: '';
+  position: absolute;
+  width: 18px; height: 18px;
+  background: white;
+  border-radius: 50%;
+  top: 3px; left: 3px;
+  transition: transform 0.2s;
+}
+.toggle.on::after { transform: translateX(20px); }
+
+/* ── Slider ── */
+.settings-slider {
+  width: 120px; height: 4px;
+  appearance: none;
+  background: rgba(255,255,255,0.15);
+  border-radius: 50px;
+  outline: none;
+  cursor: pointer;
+}
+.settings-slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 18px; height: 18px;
+  background: var(--c-accent);
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+/* ── Quality buttons ── */
+.quality-btns { display: flex; gap: 6px; }
+.q-btn {
+  padding: 6px 12px;
+  border-radius: 50px;
+  border: 1px solid var(--c-border);
+  background: transparent;
+  color: var(--c-text-dim);
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.15s;
+  touch-action: manipulation;
+}
+.q-btn.active { background: var(--c-accent); border-color: var(--c-accent); color: white; }

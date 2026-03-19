@@ -1,0 +1,80 @@
+/* ============================================================
+   BASE — Reset, CSS variables, global layout
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --c-bg: #070712;
+  --c-panel: rgba(10,10,30,0.85);
+  --c-border: rgba(120,120,255,0.18);
+  --c-accent: #6c63ff;
+  --c-accent2: #ff6b9d;
+  --c-gold: #ffd700;
+  --c-text: #e8e8ff;
+  --c-text-dim: rgba(232,232,255,0.5);
+  --radius: 14px;
+  --font-main: 'Segoe UI', system-ui, sans-serif;
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+html, body {
+  width: 100%; height: 100%;
+  overflow: hidden;
+  background: var(--c-bg);
+  font-family: var(--font-main);
+  color: var(--c-text);
+  touch-action: none;
+  -webkit-user-select: none; user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+#canvas-container {
+  position: fixed; inset: 0;
+  width: 100%; height: 100%;
+}
+
+#game-canvas {
+  display: block;
+  width: 100%; height: 100%;
+}
+
+/* ============================================================
+   ORIENTATION WARNING
+   ============================================================ */
+#orientation-warning {
+  display: none;
+  position: fixed; inset: 0;
+  background: var(--c-bg);
+  z-index: 9999;
+  align-items: center; justify-content: center;
+  flex-direction: column; gap: 16px;
+  font-size: 1.1rem; color: var(--c-text);
+  text-align: center; padding: 20px;
+}
+#orientation-warning .ow-icon { font-size: 3rem; animation: rotate90 2s ease-in-out infinite; }
+@keyframes rotate90 { 0%,100% { transform:rotate(0deg); } 50% { transform:rotate(90deg); } }
+
+/* ============================================================
+   FLOATING SCORE POPUP
+   ============================================================ */
+.float-score {
+  position: fixed;
+  font-size: 1.2rem; font-weight: 900;
+  color: var(--c-gold);
+  text-shadow: 0 0 10px rgba(255,215,0,0.8);
+  pointer-events: none;
+  animation: floatUp 1s ease-out forwards;
+  z-index: 700;
+}
+@keyframes floatUp {
+  0% { opacity:1; transform: translateY(0) scale(1); }
+  100% { opacity:0; transform: translateY(-60px) scale(1.3); }
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 400px) {
+  #joystick-zone { width: 100px; height: 100px; }
+  #boost-btn { width: 68px; height: 68px; font-size: 1.4rem; }
+}
