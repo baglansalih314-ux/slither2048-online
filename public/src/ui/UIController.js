@@ -26,9 +26,11 @@ const UIController = (() => {
     SaveManager.set('playerName', name);
     if (offline) {
       _offlineMode = true;
+      window.OfflineGameActive = true;
       OfflineGame.start(name);
     } else {
       _offlineMode = false;
+      window.OfflineGameActive = false;
       Game.start(name);
     }
   }

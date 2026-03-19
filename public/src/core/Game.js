@@ -33,6 +33,8 @@ const Game = (() => {
     checkOrientation();
     window.addEventListener('orientationchange', checkOrientation);
     window.addEventListener('resize', checkOrientation);
+
+    return { scene, camera, renderer };
   }
 
   function checkOrientation() {
@@ -201,7 +203,7 @@ const Game = (() => {
     
     // Yılan ve kamera hareketini tam animasyon karesinde çalıştır (variable timestep)
     _update(dt, timestamp / 1000);
-    Renderer.render();
+    if (running || !window.OfflineGameActive) Renderer.render();
   }
 
   function _update(dt, time) {

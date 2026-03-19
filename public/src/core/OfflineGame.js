@@ -12,18 +12,11 @@ const OfflineGame = (() => {
 
   const BOT_PERSONALITIES = ['greedy','coward','hunter','balanced','opportunist'];
 
-  function init() {
-    const r = Renderer.init();
-    scene    = r.scene;
-    camera   = r.camera;
-    renderer = r.renderer;
-    CameraController.init(camera);
-    Arena.init(scene);
-    UIController.init(true); // true = offline mode
+  function init(sharedScene, sharedCamera, sharedRenderer) {
+    scene    = sharedScene;
+    camera   = sharedCamera;
+    renderer = sharedRenderer;
     requestAnimationFrame(_renderLoop);
-    checkOrientation();
-    window.addEventListener('orientationchange', checkOrientation);
-    window.addEventListener('resize', checkOrientation);
   }
 
   function checkOrientation() {
@@ -110,6 +103,7 @@ const OfflineGame = (() => {
 
   function _renderLoop(timestamp) {
     requestAnimationFrame(_renderLoop);
+    if (!running) return;
     let dt = (timestamp - lastTime) / 1000;
     if (lastTime === 0 || dt <= 0 || dt > 0.1) { lastTime = timestamp; return; }
     lastTime = timestamp;

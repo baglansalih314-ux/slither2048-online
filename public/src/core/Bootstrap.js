@@ -1,6 +1,7 @@
 'use strict';
 window.addEventListener('DOMContentLoaded', () => {
-  Game.init();
+  const ctx = Game.init();
+  OfflineGame.init(ctx.scene, ctx.camera, ctx.renderer);
   // Kayıtlı ismi doldur
   const saved = SaveManager.get('playerName');
   if (saved) document.getElementById('name-input').value = saved;
