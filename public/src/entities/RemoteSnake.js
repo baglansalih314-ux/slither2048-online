@@ -52,17 +52,28 @@ class RemoteSnake {
   }
 
   // ── Her tick sunucudan gelen data ile güncelle ─────────────────
-  update(playerData, camera) {
+  onServerTick(playerData) {
+    this.targetData = playerData;
     this._syncSegments(playerData.segments);
+  }
 
-    playerData.segments.forEach((seg, i) => {
+  // ── Her frame (60fps) yumuşak geçiş (Interpolation) ────────────
+  update(dt, camera) {
+    const pd = this.targetData;
+    if (!pd) return;
+
+    let lerpFactor = dt * 12.0; 
+    if (lerpFactor > 1) lerpFactor = 1;
+
+    pd.segments.forEach((seg, i) => {
       const mesh = this.meshes[i];
       if (!mesh) return;
       // Pozisyon
-      const tx = seg.x ?? playerData.x;
-      const tz = seg.z ?? playerData.z;
-      mesh.position.x += (tx  - mesh.position.x) * 0.35;
-      mesh.position.z += (tz  - mesh.position.z) * 0.35;
+      const tx = seg.x ?? pd.x;
+      const tz = seg.z ?? pd.z;
+      
+      mesh.position.x += (tx  - mesh.position.x) * lerpFactor;
+      mesh.position.z += (tz  - mesh.position.z) * lerpFactor;
       mesh.position.y  = 0.5 + Math.sin(Date.now()/800 + i) * 0.07;
 
       // Renk güncelle
@@ -72,12 +83,15 @@ class RemoteSnake {
     });
 
     // Head rotation
-    if (this.meshes[0]) {
-      this.meshes[0].rotation.y = -playerData.angle;
+    if (this.meshes[0] && pd.angle !== undefined) {
+       let diff = (-pd.angle) - this.meshes[0].rotation.y;
+       while (diff >  Math.PI) diff -= Math.PI*2;
+       while (diff < -Math.PI) diff += Math.PI*2;
+       this.meshes[0].rotation.y += diff * lerpFactor;
     }
 
     // İsim etiketini kameraya göre konumlandır
-    this._updateLabel(playerData, camera);
+    this._updateLabel(pd, camera);
   }
 
   _updateLabel(playerData, camera) {

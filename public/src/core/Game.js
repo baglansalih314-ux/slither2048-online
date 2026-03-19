@@ -125,7 +125,7 @@ const Game = (() => {
         }
         activeIds.add(pd.id);
         if (!remotes[pd.id]) remotes[pd.id] = new RemoteSnake(scene, pd);
-        remotes[pd.id].update(pd, camera);
+        remotes[pd.id].onServerTick(pd);
       });
 
       Object.keys(remotes).forEach(id => {
@@ -248,6 +248,7 @@ const Game = (() => {
       NetworkManager.sendInput(input.x, input.y, false);
     }
 
+    Object.values(remotes).forEach(r => r.update(dt, camera));
     VFX.update(dt);
   }
 
