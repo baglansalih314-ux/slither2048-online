@@ -230,15 +230,9 @@ const Game = (() => {
              player.headPosition.x += dx * 0.04 * f;
              player.headPosition.z += dz * 0.04 * f;
          }
-         
-         // Açı Toleransı (~8 dereceden / 0.15 radyandan az farkları tolere et)
-         let diff = player.serverAngle - player.angle;
-         while (diff >  Math.PI) diff -= Math.PI*2;
-         while (diff < -Math.PI) diff += Math.PI*2;
-         
-         if (Math.abs(diff) > 0.15) {
-             player.angle += diff * 0.04 * f;
-         }
+         // NOT: Açı eşitlemesi kasıtlı olarak kaldırıldı.
+         // Sunucu açısı ağ gecikmesi nedeniyle inputu her zaman doğru yansıtmaz.
+         // Yılanın dönüşü tamamen oyuncu inputuna bırakılmıştır.
       }
 
       // 2. Client Side Prediction! Runs at native 60fps/144fps perfectly!
